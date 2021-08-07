@@ -1,14 +1,11 @@
-﻿using MainMusicStore.UI.Models;
+﻿using System.Diagnostics;
+using MainMusicStore.UI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace MainMusicStore.UI.Controllers
+namespace MainMusicStore.UI.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
