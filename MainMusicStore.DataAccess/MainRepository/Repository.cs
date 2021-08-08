@@ -10,14 +10,11 @@ namespace MainMusicStore.DataAccess.MainRepository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly MainMusicStoreDbContext _mainMusicStoreDbContext;
-
         internal DbSet<T> DbSet;
 
         public Repository(MainMusicStoreDbContext mainMusicStoreDbContext)
         {
-            _mainMusicStoreDbContext = mainMusicStoreDbContext;
-            DbSet = _mainMusicStoreDbContext.Set<T>();
+            DbSet = mainMusicStoreDbContext.Set<T>();
         }
 
         public void Add(T entity)
@@ -41,7 +38,7 @@ namespace MainMusicStore.DataAccess.MainRepository
 
             if (includeProperties != null)
             {
-                foreach (var item in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var item in includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     queryableTypeDbSet = queryableTypeDbSet.Include(item);
                 }
@@ -65,7 +62,7 @@ namespace MainMusicStore.DataAccess.MainRepository
 
             if (includeProperties != null)
             {
-                foreach (var item in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var item in includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     queryableTypeDbSet = queryableTypeDbSet.Include(item);
                 }
