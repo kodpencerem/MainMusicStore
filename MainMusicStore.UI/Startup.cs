@@ -1,4 +1,6 @@
 using MainMusicStore.DataAccess.Data;
+using MainMusicStore.DataAccess.IMainRepository;
+using MainMusicStore.DataAccess.MainRepository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +27,7 @@ namespace MainMusicStore.UI
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
-
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<MainMusicStoreDbContext>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

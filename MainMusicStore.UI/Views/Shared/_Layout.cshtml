@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MainMusicStore.UI</title>
+    <title>MainMusicStore.UI</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
@@ -27,19 +27,29 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">
-                                <i class="fas fa-home"></i>
+                                <i class="fa fa-home"></i>
                                 Home
                             </a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-th-list"></i>
                                 Select Action
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Category Action</a>
-                                <a class="dropdown-item" href="#">Cover Type Action</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">
+                                    <i class="fa fa-list-ul"></i>
+                                    Category Action
+                                </a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="CoverType" asp-action="Index">
+                                    <i class="fab fa-cc-discover"></i>
+                                    Cover Type Action
+                                </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Product Action</a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa fa-product-hunt"></i>
+                                    Product Action
+                                </a>
                             </div>
                         </li>
                     </ul>
