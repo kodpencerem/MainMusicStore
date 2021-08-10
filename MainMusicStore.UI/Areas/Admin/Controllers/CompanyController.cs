@@ -1,12 +1,14 @@
 ﻿using MainMusicStore.DataAccess.IMainRepository;
 using MainMusicStore.Models.DbModels;
 using MainMusicStore.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainMusicStore.UI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CategoryController : Controller
+    //[Authorize(Roles = ProjectConstant.RoleAdmin + "," + ProjectConstant.RoleEmployee)]
+    public class CompanyController : Controller
     {
         #region Variables
 
@@ -16,7 +18,7 @@ namespace MainMusicStore.UI.Areas.Admin.Controllers
 
         #region Constraction
 
-        public CategoryController(IUnitOfWork unitOfWork)
+        public CompanyController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -33,13 +35,13 @@ namespace MainMusicStore.UI.Areas.Admin.Controllers
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var deleteData = _unitOfWork.CategoryRepository.Get(id);
+            var deleteData = _unitOfWork.CompanyRepository.Get(id);
             if (deleteData == null)
-                return Json(new { success = false, message = ProjectConstant.ResultNotFound });
+                return Json(new { success = false, message =  ProjectConstant.ResultNotFound });
 
-            _unitOfWork.CategoryRepository.Remove(deleteData);
+            _unitOfWork.CompanyRepository.Remove(deleteData);
             _unitOfWork.Save();
-            return Json(new { success = true, message = ProjectConstant.ResultSuccess });
+            return Json(new { success = true, message=ProjectConstant.ResultSuccess });
         }
 
         /// <summary>
@@ -51,45 +53,41 @@ namespace MainMusicStore.UI.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Upsert(int? id)
         {
-            Category category = new Category();
+            Company company = new Company();
             if (id == null)
             {
                 //This for Create
-                return View(category);
+                return View(company);
             }
 
-            category = _unitOfWork.CategoryRepository.Get((int)id);
-            if (category != null)
+            company = _unitOfWork.CompanyRepository.Get((int)id);
+            if (company != null)
             {
-                //This for Update
-                return View(category);
+                return View(company);
             }
-
             return NotFound();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(Category category)
+        public IActionResult Upsert(Company company)
         {
             if (ModelState.IsValid)
             {
-                if (category.Id == 0)
+                if (company.Id == 0)
                 {
                     //Create
-                    _unitOfWork.CategoryRepository.Add(category);
+                    _unitOfWork.CompanyRepository.Add(company);
                 }
                 else
                 {
                     //Update
-                    _unitOfWork.CategoryRepository.Update(category);
+                    _unitOfWork.CompanyRepository.Update(company);
                 }
-
                 _unitOfWork.Save();
                 return RedirectToAction("Index");
             }
-
-            return View(category);
+            return View(company);
         }
 
         #endregion Actions
@@ -98,7 +96,7 @@ namespace MainMusicStore.UI.Areas.Admin.Controllers
 
         public IActionResult GetAll()
         {
-            var allObj = _unitOfWork.CategoryRepository.GetAll();
+            var allObj = _unitOfWork.CompanyRepository.GetAll();
             return Json(new { data = allObj });
         }
 

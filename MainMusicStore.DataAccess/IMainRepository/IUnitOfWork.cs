@@ -8,7 +8,8 @@ namespace MainMusicStore.DataAccess.IMainRepository
         ICategoryRepository CategoryRepository { get; }
         ISpCallRepository SpCallRepository { get; }
         ICoverTypeRepository CoverTypeRepository { get; }
-
+        IProductRepository  ProductRepository { get; }
+        ICompanyRepository CompanyRepository { get; }
         void Save();
     }
 }

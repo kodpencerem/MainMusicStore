@@ -3,7 +3,7 @@
     public static class ProjectConstant
     {
         public const string ResultNotFound = "Data Not Found";
-
+        public const string ResultSuccess = "Delete Operation Successfully";
         //----------------------------------------------------------//
         public const string ProcCoverTypeGetAll = "usp_GetCoverTypes";
         public const string ProcCoverTypeGet = "usp_GetCoverType";

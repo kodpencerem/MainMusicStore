@@ -31,6 +31,14 @@
                                 Home
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="Admin" asp-controller="Company" asp-action="Index">
+                                <i class="fa fa-bank"></i>
+                                Company
+                            </a>
+                        </li>
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-th-list"></i>
@@ -46,7 +54,7 @@
                                     Cover Type Action
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">
                                     <i class="fa fa-product-hunt"></i>
                                     Product Action
                                 </a>

@@ -46,11 +46,11 @@ namespace MainMusicStore.UI.Areas.Admin.Controllers
 
             var deleteData = _unitOfWork.SpCallRepository.OneRecord<CoverType>(ProjectConstant.ProcCoverTypeGet, dynamicParameters);
             if (deleteData == null)
-                return Json(new { success = false, message = "Data Not Found!" });
+                return Json(new { success = false, message = ProjectConstant.ResultNotFound });
 
             _unitOfWork.SpCallRepository.Execute(ProjectConstant.ProcCoverTypeDelete, dynamicParameters);
             _unitOfWork.Save();
-            return Json(new { success = true, message = "Delete Operation Successfully" });
+            return Json(new { success = true, message = ProjectConstant.ResultSuccess});
         }
 
         /// <summary>
