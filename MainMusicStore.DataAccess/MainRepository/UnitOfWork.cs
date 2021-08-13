@@ -15,6 +15,7 @@ namespace MainMusicStore.DataAccess.MainRepository
             CoverTypeRepository = new CoverTypeRepository(_mainMusicStoreDbContext);
             ProductRepository = new ProductRepository(_mainMusicStoreDbContext);
             CompanyRepository = new CompanyRepository(_mainMusicStoreDbContext);
+            ApplicationUserRepository = new ApplicationUserRepository(_mainMusicStoreDbContext);
         }
 
 
@@ -22,8 +23,8 @@ namespace MainMusicStore.DataAccess.MainRepository
         public ISpCallRepository SpCallRepository { get; private set; }
         public IProductRepository ProductRepository { get; private set; }
         public ICoverTypeRepository CoverTypeRepository { get; private set; }
-        public ICompanyRepository CompanyRepository { get; set; }
-
+        public ICompanyRepository CompanyRepository { get; private set; }
+        public IApplicationUserRepository ApplicationUserRepository { get; private set; }
         public void Save()
         {
             _mainMusicStoreDbContext.SaveChanges();
