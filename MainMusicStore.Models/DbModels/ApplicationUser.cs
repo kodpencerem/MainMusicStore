@@ -13,6 +13,8 @@ namespace MainMusicStore.Models.DbModels
         public string State { get; set; }
         public string PostaCode { get; set; }
 
+       
+
         public int? CompanyId { get; set; }
 
         [ForeignKey("CompanyId")]
