@@ -21,13 +21,13 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
     [Area("Customer")]
     public class CartController : Controller
     {
-        private readonly IUnitOfWork _uow;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailSender _emailSender;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public CartController(IUnitOfWork uow, IEmailSender emailSender, UserManager<IdentityUser> userManager)
+        public CartController(IUnitOfWork unitOfWork, IEmailSender emailSender, UserManager<IdentityUser> userManager)
         {
-            _uow = uow;
+            _unitOfWork = unitOfWork;
             _emailSender = emailSender;
             _userManager = userManager;
         }
@@ -44,11 +44,11 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
             ShoppingCartVm = new ShoppingCartVm()
             {
                 OrderHeader = new OrderHeader(),
-                ListCart = _uow.ShoppingCartRepository.GetAll(u => u.ApplicationUserId == claims.Value, includeProperties: "Product")
+                ListCart = _unitOfWork.ShoppingCartRepository.GetAll(u => u.ApplicationUserId == claims.Value, includeProperties: "Product")
             };
 
             ShoppingCartVm.OrderHeader.OrderTotal = 0;
-            ShoppingCartVm.OrderHeader.ApplicationUser = _uow.ApplicationUserRepository
+            ShoppingCartVm.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUserRepository
                                                         .GetFirstOrDefault(u => u.Id == claims.Value, includeProperties: "Company");
 
             foreach (var cart in ShoppingCartVm.ListCart)
@@ -72,7 +72,7 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            var user = _uow.ApplicationUserRepository.GetFirstOrDefault(u => u.Id == claims.Value);
+            var user = _unitOfWork.ApplicationUserRepository.GetFirstOrDefault(u => u.Id == claims.Value);
 
             if (user == null)
                 ModelState.AddModelError(string.Empty, "Verification email is empty!");
@@ -97,7 +97,7 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
         {
             try
             {
-                var cart = _uow.ShoppingCartRepository.GetFirstOrDefault(x => x.Id == id, includeProperties: "Product");
+                var cart = _unitOfWork.ShoppingCartRepository.GetFirstOrDefault(x => x.Id == id, includeProperties: "Product");
 
                 if (cart == null)
                     return Json(false);
@@ -106,8 +106,8 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
                 cart.Count += 1;
                 cart.Price = ProjectConstant.GetPriceBaseOnQuantity(cart.Count, cart.Product.Price, cart.Product.Price50, cart.Product.Price100);
 
-                _uow.Save();
-                //var allShoppingCart = _uow.ShoppingCart.GetAll();
+                _unitOfWork.Save();
+                //var allShoppingCart = _unitOfWork.ShoppingCart.GetAll();
 
                 return Json(true);
                 //return RedirectToAction("Index");
@@ -120,30 +120,30 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
 
         public IActionResult Minus(int cartId)
         {
-            var cart = _uow.ShoppingCartRepository.GetFirstOrDefault(x => x.Id == cartId, includeProperties: "Product");
+            var cart = _unitOfWork.ShoppingCartRepository.GetFirstOrDefault(x => x.Id == cartId, includeProperties: "Product");
             if (cart.Count == 1)
             {
-                var cnt = _uow.ShoppingCartRepository.GetAll(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count;
-                _uow.ShoppingCartRepository.Remove(cart);
-                _uow.Save();
+                var cnt = _unitOfWork.ShoppingCartRepository.GetAll(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count;
+                _unitOfWork.ShoppingCartRepository.Remove(cart);
+                _unitOfWork.Save();
                 HttpContext.Session.SetInt32(ProjectConstant.ShoppingCart, cnt - 1);
             }
             else
             {
                 cart.Count -= 1;
                 cart.Price = ProjectConstant.GetPriceBaseOnQuantity(cart.Count, cart.Product.Price, cart.Product.Price50, cart.Product.Price100);
-                _uow.Save();
+                _unitOfWork.Save();
             }
             return RedirectToAction("Index");
         }
 
         public IActionResult Remove(int cartId)
         {
-            var cart = _uow.ShoppingCartRepository.GetFirstOrDefault(x => x.Id == cartId, includeProperties: "Product");
+            var cart = _unitOfWork.ShoppingCartRepository.GetFirstOrDefault(x => x.Id == cartId, includeProperties: "Product");
 
-            var cnt = _uow.ShoppingCartRepository.GetAll(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count;
-            _uow.ShoppingCartRepository.Remove(cart);
-            _uow.Save();
+            var cnt = _unitOfWork.ShoppingCartRepository.GetAll(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count;
+            _unitOfWork.ShoppingCartRepository.Remove(cart);
+            _unitOfWork.Save();
             HttpContext.Session.SetInt32(ProjectConstant.ShoppingCart, cnt - 1);
 
             return RedirectToAction("Index");
@@ -157,10 +157,10 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
             ShoppingCartVm = new ShoppingCartVm()
             {
                 OrderHeader = new OrderHeader(),
-                ListCart = _uow.ShoppingCartRepository.GetAll(u => u.ApplicationUserId == claims.Value, includeProperties: "Product")
+                ListCart = _unitOfWork.ShoppingCartRepository.GetAll(u => u.ApplicationUserId == claims.Value, includeProperties: "Product")
             };
 
-            ShoppingCartVm.OrderHeader.ApplicationUser = _uow.ApplicationUserRepository
+            ShoppingCartVm.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUserRepository
                                                         .GetFirstOrDefault(u => u.Id == claims.Value, includeProperties: "Company");
 
             foreach (var item in ShoppingCartVm.ListCart)
@@ -186,17 +186,17 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            ShoppingCartVm.OrderHeader.ApplicationUser = _uow.ApplicationUserRepository.GetFirstOrDefault(a => a.Id == claims.Value, includeProperties: "Company");
+            ShoppingCartVm.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUserRepository.GetFirstOrDefault(a => a.Id == claims.Value, includeProperties: "Company");
 
-            ShoppingCartVm.ListCart = _uow.ShoppingCartRepository.GetAll(s => s.ApplicationUserId == claims.Value, includeProperties: "Product");
+            ShoppingCartVm.ListCart = _unitOfWork.ShoppingCartRepository.GetAll(s => s.ApplicationUserId == claims.Value, includeProperties: "Product");
 
             ShoppingCartVm.OrderHeader.PaymentStatus = ProjectConstant.PaymentStatusPending;
             ShoppingCartVm.OrderHeader.OrderStatus = ProjectConstant.StatusPending;
             ShoppingCartVm.OrderHeader.ApplicationUserId = claims.Value;
             ShoppingCartVm.OrderHeader.OrderDate = DateTime.Now;
 
-            _uow.OrderHeaderRepository.Add(ShoppingCartVm.OrderHeader);
-            _uow.Save();
+            _unitOfWork.OrderHeaderRepository.Add(ShoppingCartVm.OrderHeader);
+            _unitOfWork.Save();
 
             List<OrderDetails> orderDetailsList = new List<OrderDetails>();
             foreach (var orderDetail in ShoppingCartVm.ListCart)
@@ -211,10 +211,10 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
                     Count = orderDetail.Count
                 };
                 ShoppingCartVm.OrderHeader.OrderTotal += oDetails.Count * oDetails.Price;
-                _uow.OrderDetailRepository.Add(oDetails);
+                _unitOfWork.OrderDetailRepository.Add(oDetails);
             }
-            _uow.ShoppingCartRepository.RemoveRange(ShoppingCartVm.ListCart);
-            _uow.Save();
+            _unitOfWork.ShoppingCartRepository.RemoveRange(ShoppingCartVm.ListCart);
+            _unitOfWork.Save();
             HttpContext.Session.SetInt32(ProjectConstant.ShoppingCart, 0);
 
             if (stripeToken == null)
@@ -248,7 +248,7 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
                     ShoppingCartVm.OrderHeader.PaymentDate = DateTime.Now;
                 }
             }
-            _uow.Save();
+            _unitOfWork.Save();
             return RedirectToAction("OrderConfirmation", "Cart", new { id = ShoppingCartVm.OrderHeader.Id });
         }
 
