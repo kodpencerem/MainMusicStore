@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MainMusicStore.DataAccess.Migrations
 {
     [DbContext(typeof(MainMusicStoreDbContext))]
-    [Migration("20210809201517_AddCompanyTableToDb")]
-    partial class AddCompanyTableToDb
+    [Migration("20210814170922_UpdateApplicationUser")]
+    partial class UpdateApplicationUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

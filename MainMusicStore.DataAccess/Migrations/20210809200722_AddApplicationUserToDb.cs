@@ -26,7 +26,7 @@ namespace MainMusicStore.DataAccess.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "PostaCode",
+                name: "PostCode",
                 table: "AspNetUsers",
                 type: "nvarchar(max)",
                 nullable: true);
@@ -59,7 +59,7 @@ namespace MainMusicStore.DataAccess.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "PostaCode",
+                name: "PostCode",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
