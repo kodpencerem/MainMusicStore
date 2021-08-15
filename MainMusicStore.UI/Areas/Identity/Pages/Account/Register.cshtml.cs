@@ -70,6 +70,7 @@ namespace MainMusicStore.UI.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
+
             [Required]
             public string Name { get; set; }
             public string StreetAddress { get; set; }
@@ -89,6 +90,24 @@ namespace MainMusicStore.UI.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
+
+            Input = new InputModel()
+            {
+                CompanyList = _unitOfWork.CompanyRepository.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                }),
+
+                RoleList = _roleManager.Roles
+                .Where(r => r.Name != ProjectConstant.RoleUserIndi)
+                .Select(x => x.Name).Select(i => new SelectListItem
+                {
+                    Text = i,
+                    Value = i
+                })
+            };
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
@@ -99,7 +118,6 @@ namespace MainMusicStore.UI.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 //var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
-
                 var user = new ApplicationUser
                 {
                     UserName = Input.Email,
@@ -113,8 +131,6 @@ namespace MainMusicStore.UI.Areas.Identity.Pages.Account
                     PhoneNumber = Input.PhoneNumber,
                     Role = Input.Role
                 };
-
-
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
@@ -133,13 +149,12 @@ namespace MainMusicStore.UI.Areas.Identity.Pages.Account
                         await _userManager.AddToRoleAsync(user, user.Role);
                     }
 
-
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code = code },
+                        values: new { area = "Identity", userId = user.Id, code },
                         protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",

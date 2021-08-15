@@ -11,6 +11,10 @@ namespace MainMusicStore.DataAccess.IMainRepository
         IProductRepository  ProductRepository { get; }
         ICompanyRepository CompanyRepository { get; }
         IApplicationUserRepository ApplicationUserRepository { get; }
+        IShoppingCartRepository ShoppingCartRepository { get; }
+        IOrderHeaderRepository OrderHeaderRepository { get; }
+        IOrderDetailRepository OrderDetailRepository { get; }
+
         void Save();
     }
 }

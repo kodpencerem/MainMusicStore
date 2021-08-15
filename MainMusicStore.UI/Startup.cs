@@ -1,18 +1,19 @@
 using System;
-using MainMusicStore.DataAccess.Data;
-using MainMusicStore.DataAccess.IMainRepository;
-using MainMusicStore.DataAccess.MainRepository;
-using MainMusicStore.Utility;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Office.Interop.Word;
+using Microsoft.AspNetCore.Identity.UI.Services;
+//using Stripe;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using MainMusicStore.DataAccess.Data;
+using MainMusicStore.Utility;
+using MainMusicStore.DataAccess.Initiliazer;
+using MainMusicStore.DataAccess.IMainRepository;
+using MainMusicStore.DataAccess.MainRepository;
 
 namespace MainMusicStore.UI
 {
@@ -35,14 +36,14 @@ namespace MainMusicStore.UI
                 .AddEntityFrameworkStores<MainMusicStoreDbContext>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
-
+            services.AddMvc();
             services.Configure<Utility.EmailOptions>(Configuration);
-            //services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
             //services.Configure<BrainTreeSettings>(Configuration.GetSection("BrainTree"));
             //services.Configure<TwilioSettings>(Configuration.GetSection("Twilio"));
             //services.AddSingleton<IBrainTreeGate, BrainTreeGate>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            //services.AddScoped<IDbInitiliazer, DbInitializer>();
+            services.AddScoped<IDbInitiliazer, DbInitializer>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.ConfigureApplicationCookie(options =>
@@ -51,17 +52,17 @@ namespace MainMusicStore.UI
                 options.LogoutPath = $"/Identity/Account/Logout";
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
-            //services.AddAuthentication().AddFacebook(options =>
-            //{
-            //    options.AppId = "479144716347128";
-            //    options.AppSecret = "8888cefba55e9cfa06a2b28f0495e533";
-            //});
-            //services.AddAuthentication().AddGoogle(options =>
-            //{
-            //    options.ClientId = "751413081977-ct8rrlcf8cgt8f42b5evots13mg458lt.apps.googleusercontent.com";
-            //    options.ClientSecret = "LPRLug47n8OQsYAirUVGofLw";
+            services.AddAuthentication().AddFacebook(options =>
+            {
+                options.AppId = "479144716347128";
+                options.AppSecret = "8888cefba55e9cfa06a2b28f0495e533";
+            });
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                options.ClientId = "751413081977-ct8rrlcf8cgt8f42b5evots13mg458lt.apps.googleusercontent.com";
+                options.ClientSecret = "LPRLug47n8OQsYAirUVGofLw";
 
-            //});
+            });
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -90,6 +91,8 @@ namespace MainMusicStore.UI
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSession();  
+            
 
             app.UseEndpoints(endpoints =>
             {
