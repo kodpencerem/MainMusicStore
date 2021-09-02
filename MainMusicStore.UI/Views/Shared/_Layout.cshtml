@@ -18,7 +18,10 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-success border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Music Store</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fa fa-music"></i>
+                    Main Music Store
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -27,7 +30,10 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fa fa-home"></i>
+                                Home
+                            </a>
                         </li>
                         @if (User.IsInRole(ProjectConstant.RoleAdmin))
                         {
@@ -36,14 +42,23 @@
                                     Content Managment
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">
+                                        <i class="fa fa-list"></i>
+                                        Category
+                                    </a>
 
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="CoverType" asp-action="Index">Cover Type</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="CoverType" asp-action="Index">
+                                        <i class="fab fa-cc-discover"></i>
+                                        Cover Type
+                                    </a>
 
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
+                                    
 
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Something else here</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">
+                                        <i class="fab fa-product-hunt"></i>
+                                        Product
+                                    </a>
                                 </div>
                             </li>
                         }
@@ -55,13 +70,22 @@
                                     User / Company
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Company" asp-action="Index">Company</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">User List</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Company" asp-action="Index">
+                                        <i class="far fa-building"></i>
+                                        Company
+                                    </a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">
+                                        <i class="fas fa-users"></i>
+                                        User List
+                                    </a>
                                 </div>
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="Admin" asp-controller="Order" asp-action="Index">Orders</a>
+                            <a class="nav-link text-white" asp-area="Admin" asp-controller="Order" asp-action="Index">
+                                <i class="fas fa-shopping-cart"></i>
+                                Orders
+                            </a>
                         </li>
                         @if (HttpContextAccessor.HttpContext.Session.GetInt32(ProjectConstant.ShoppingCart) != null)
                         {
@@ -70,7 +94,7 @@
                                     @{
                                         var count = HttpContextAccessor.HttpContext.Session.GetInt32(ProjectConstant.ShoppingCart);
                                     }
-                                    <i class="fas fa-shopping-cart"> (@count)</i>
+                                    <i class="fa fa-shopping-cart"> (@count)</i>
                                 </a>
                             </li>
                         }
@@ -79,7 +103,7 @@
                             <li style="color:white">
                                 <a href="#" class="nav-link">
 
-                                    <i class="fas fa-shopping-cart"> (0)</i>
+                                    <i class="fa fa-shopping-cart"> (0)</i>
                                 </a>
                             </li>
                         }

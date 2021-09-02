@@ -60,7 +60,7 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
             cartObj.Id = 0;
             if (ModelState.IsValid)
             {
-                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claimsIdentity = (ClaimsIdentity)User.Identity; //https://www.gencayyildiz.com/blog/asp-net-core-identity-claim-bazli-kimlik-dogrulama-xvii/ claim bazlı yetkilendirme ve rol seçenekleri
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
                 cartObj.ApplicationUserId = claim.Value;
 
