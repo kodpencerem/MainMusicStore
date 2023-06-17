@@ -11,8 +11,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MainMusicStore.DataAccess.Data;
 using MainMusicStore.Utility;
-using MainMusicStore.DataAccess.Initiliazer;
 using MainMusicStore.DataAccess.IMainRepository;
+using MainMusicStore.DataAccess.Initiliazer;
 using MainMusicStore.DataAccess.MainRepository;
 
 namespace MainMusicStore.UI
