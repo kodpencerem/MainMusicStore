@@ -39,7 +39,7 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
         public IActionResult Index()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var claims = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
 
             ShoppingCartVm = new ShoppingCartVm()
             {
@@ -71,7 +71,7 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
         public async Task<IActionResult> IndexPost()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var claims = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
             var user = _unitOfWork.ApplicationUserRepository.GetFirstOrDefault(u => u.Id == claims.Value);
 
             if (user == null)
@@ -82,10 +82,10 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
             var callbackUrl = Url.Page(
                 "/Account/ConfirmEmail",
                 pageHandler: null,
-                values: new { area = "Identity", userId = user.Id, code = code },
+                values: new { area = "Identity", userId = user?.Id, code },
                 protocol: Request.Scheme);
 
-            await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
+            await _emailSender.SendEmailAsync(user?.Email, "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
             ModelState.AddModelError(string.Empty, "verification emil sent.Please check your email!");
@@ -112,7 +112,7 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
                 return Json(true);
                 //return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Json(false);
             }
@@ -152,7 +152,7 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
         public IActionResult Summary()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var claims = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
 
             ShoppingCartVm = new ShoppingCartVm()
             {
@@ -198,12 +198,16 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
             _unitOfWork.OrderHeaderRepository.Add(ShoppingCartVm.OrderHeader);
             _unitOfWork.Save();
 
-            List<OrderDetails> orderDetailsList = new List<OrderDetails>();
-            foreach (var orderDetail in ShoppingCartVm.ListCart)
+            List<OrderDetails> orderDetailsList = new List<OrderDetails>
+            {
+                Capacity = 0
+            };
+            var shoppingCarts = ShoppingCartVm.ListCart as ShoppingCart[] ?? ShoppingCartVm.ListCart.ToArray();
+            foreach (var orderDetail in shoppingCarts)
             {
                 orderDetail.Price = ProjectConstant.GetPriceBaseOnQuantity(orderDetail.Count, orderDetail.Product.Price, orderDetail.Product.Price50, orderDetail.Product.Price100);
 
-                OrderDetails oDetails = new OrderDetails()
+                OrderDetails oDetails = new OrderDetails
                 {
                     ProductId = orderDetail.ProductId,
                     OrderId = ShoppingCartVm.OrderHeader.Id,
@@ -213,7 +217,7 @@ namespace MainMusicStore.UI.Areas.Customer.Controllers
                 ShoppingCartVm.OrderHeader.OrderTotal += oDetails.Count * oDetails.Price;
                 _unitOfWork.OrderDetailRepository.Add(oDetails);
             }
-            _unitOfWork.ShoppingCartRepository.RemoveRange(ShoppingCartVm.ListCart);
+            _unitOfWork.ShoppingCartRepository.RemoveRange(shoppingCarts);
             _unitOfWork.Save();
             HttpContext.Session.SetInt32(ProjectConstant.ShoppingCart, 0);
 

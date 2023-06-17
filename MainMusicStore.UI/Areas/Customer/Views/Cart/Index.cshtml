@@ -14,12 +14,12 @@
             <div class="container">
                 <div class="card">
                     <div class="card-header bg-dark text-light ml-0 row container">
-                        <div class="col-6">
+                        <div class="col-9">
                             <i class="fa fa-shopping-cart"></i> &nbsp;
                             Shopping Cart
                         </div>
-                        <div class="col-6 text-right">
-                            <a class="btn btn-outline-info btn-sm">Continue Shopping</a>
+                        <div class="col-3 text-right">
+                            <a class="btn btn-outline-info btn-sm text-white" asp-action="Index" asp-controller="Home">Continue Shopping</a>
                         </div>
                     </div>
 
@@ -28,7 +28,7 @@
                         {
                             <div class="row">
                                 <div class="d-none d-lg-block col-lg-1 text-center py-2">
-                                    <img src="@item.Product.ImageUrl" class="rounded" width="100%" />
+                                    <img src="@item.Product.ImageUrl" class="rounded" width="100" />
                                 </div>
                                 <div class="col-12 text-sm-center col-lg-6 text-lg-left">
                                     <h5><strong>@item.Product.Title</strong></h5>

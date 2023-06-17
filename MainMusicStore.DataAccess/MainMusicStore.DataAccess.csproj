@@ -5,14 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.90" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.9" />
+    <ProjectReference Include="..\MainMusicStore.Models\MainMusicStore.Models.csproj" />
+    <ProjectReference Include="..\MainMusicStore.Utility\MainMusicStore.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MainMusicStore.Models\MainMusicStore.Models.csproj" />
-    <ProjectReference Include="..\MainMusicStore.Utility\MainMusicStore.Utility.csproj" />
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.90" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.9" />
   </ItemGroup>
 
 </Project>
